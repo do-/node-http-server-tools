@@ -69,6 +69,7 @@ test ('echo', async () => {
 
 	const rp = await getResponseFromServer ('/?id=1', {requestOptions: {method: 'POST', body}, 
 		ctxOptions: {
+			statusCode: 202,
 			keepBody: function () {return this.searchParams.id == 1}
 		},
 		cb: async ctx => {
@@ -78,7 +79,7 @@ test ('echo', async () => {
 		}
 	})
 
-	expect (rp.statusCode).toBe (200)
+	expect (rp.statusCode).toBe (202)
 	expect (rp.responseText).toBe (body)
 	expect (rp.headers ['content-type']).toBe ('application/quintet-stream')
 
