@@ -172,7 +172,40 @@ test ('xml_dump', async () => {
 
 test ('big post', async () => {
 
-	const rp = await getResponseFromServer ('/?id=1', {requestOptions: {method: 'POST', body: '{"label": "A"}'}, 
+	const rp = await getResponseFromServer ('/?id=1', {
+		requestOptions: {
+			method: 'POST', 
+			body: '{"label": "A"}'
+		}, 
+		ctxOptions: {
+			maxBodySize: 1,
+		},
+		cb: async ctx => {
+
+			try {
+				await ctx.readBody ()
+				const {searchParams, bodyParams} = ctx
+				await ctx.write ({searchParams, bodyParams})	
+			}
+			catch (err) {
+				await ctx.writeError (err)
+			}
+
+		}
+	})
+
+	expect (rp.statusCode).toBe (413)
+
+})
+
+test ('big post, corrupted length', async () => {
+
+	const rp = await getResponseFromServer ('/?id=1', {
+		requestOptions: {
+			method: 'POST', 
+			headers: {'content-length': '1'}, 
+			body: '{"label": "A"}'
+		}, 
 		ctxOptions: {
 			maxBodySize: 1,
 		},
