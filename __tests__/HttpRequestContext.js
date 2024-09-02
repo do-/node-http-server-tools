@@ -58,7 +58,8 @@ test ('post', async () => {
 		cb: async ctx => {
 			await ctx.readBody ()
 			const {searchParams, bodyParams, cookieParams} = ctx
-			await ctx.write ({searchParams, bodyParams, cookieParams})
+			ctx.setCookie ('session', cookieParams.session, {maxAge: 1000})
+			await ctx.write ({searchParams, bodyParams})
 		}
 	})
 
@@ -66,9 +67,9 @@ test ('post', async () => {
 	expect (JSON.parse (rp.responseText)).toStrictEqual ({
 		searchParams: {id: '1'}, 
 		bodyParams: {label: "A"},
-		cookieParams: {session: '0', user: '1'},
 	})
 	expect (rp.headers ['content-type']).toBe ('application/json; charset=utf-8')
+	expect (rp.headers ['cookie']).toBe ('session=0; Max-Age=1000')
 
 })
 
