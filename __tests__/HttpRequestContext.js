@@ -49,7 +49,7 @@ test ('buffer', async () => {
 
 test ('post', async () => {
 
-	const rp = await getResponseFromServer ('/user/1/?action=delete', {
+	const rp = await getResponseFromServer ('/users/1/?action=delete', {
 		requestOptions: {
 			method: 'POST', 
 			body: '{"label": "A"}',
@@ -57,9 +57,9 @@ test ('post', async () => {
 		}, 
 		cb: async ctx => {
 			await ctx.readBody ()
-			const {searchParams, bodyParams, cookieParams} = ctx
+			const {searchParams, bodyParams, cookieParams, path} = ctx
 			ctx.setCookie ('session', cookieParams.session, {maxAge: 1000})
-			await ctx.write ({searchParams, bodyParams})
+			await ctx.write ({searchParams, bodyParams, path})
 		}
 	})
 
@@ -67,6 +67,7 @@ test ('post', async () => {
 	expect (JSON.parse (rp.responseText)).toStrictEqual ({
 		searchParams: {action: 'delete'}, 
 		bodyParams: {label: "A"},
+		path: ['users', '1']
 	})
 	expect (rp.headers ['content-type']).toBe ('application/json; charset=utf-8')
 	expect (rp.headers ['cookie']).toBe ('session=0; Max-Age=1000')
