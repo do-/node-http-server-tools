@@ -155,3 +155,27 @@ test ('xml_dump', async () => {
 	expect (rp.headers ['content-type']).toBe ('text/xml; charset=utf-8')
 
 })
+
+test ('big post', async () => {
+
+	const rp = await getResponseFromServer ('/?id=1', {requestOptions: {method: 'POST', body: '{"label": "A"}'}, 
+		ctxOptions: {
+			maxBodySize: 1,
+		},
+		cb: async ctx => {
+
+			try {
+				await ctx.readBody ()
+				const {searchParams, bodyParams} = ctx
+				await ctx.write ({searchParams, bodyParams})	
+			}
+			catch (err) {
+				await ctx.writeError (err)
+			}
+
+		}
+	})
+
+	expect (rp.statusCode).toBe (413)
+
+})
