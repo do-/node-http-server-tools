@@ -37,7 +37,7 @@ test ('buffer', async () => {
 
 	const rp = await getResponseFromServer ('/?code=65', {
 		cb: async ctx => {
-			await ctx.write (Buffer.from ([parseInt (ctx.searchParams.code)]))
+			await ctx.write (Buffer.from ([parseInt (ctx.searchParams.code) + Object.entries (ctx.cookieParams).length]))
 		} 
 	})
 
@@ -49,16 +49,25 @@ test ('buffer', async () => {
 
 test ('post', async () => {
 
-	const rp = await getResponseFromServer ('/?id=1', {requestOptions: {method: 'POST', body: '{"label": "A"}'}, 
+	const rp = await getResponseFromServer ('/?id=1', {
+		requestOptions: {
+			method: 'POST', 
+			body: '{"label": "A"}',
+			headers: {Cookie: 'session=0; user=1'},
+		}, 
 		cb: async ctx => {
 			await ctx.readBody ()
-			const {searchParams, bodyParams} = ctx
-			await ctx.write ({searchParams, bodyParams})
+			const {searchParams, bodyParams, cookieParams} = ctx
+			await ctx.write ({searchParams, bodyParams, cookieParams})
 		}
 	})
 
 	expect (rp.statusCode).toBe (200)
-	expect (JSON.parse (rp.responseText)).toStrictEqual ({searchParams: {id: '1'}, bodyParams: {label: "A"}})
+	expect (JSON.parse (rp.responseText)).toStrictEqual ({
+		searchParams: {id: '1'}, 
+		bodyParams: {label: "A"},
+		cookieParams: {session: '0', user: '1'},
+	})
 	expect (rp.headers ['content-type']).toBe ('application/json; charset=utf-8')
 
 })
