@@ -49,7 +49,7 @@ test ('buffer', async () => {
 
 test ('post', async () => {
 
-	const rp = await getResponseFromServer ('/?id=1', {
+	const rp = await getResponseFromServer ('/user/1/?action=delete', {
 		requestOptions: {
 			method: 'POST', 
 			body: '{"label": "A"}',
@@ -65,7 +65,7 @@ test ('post', async () => {
 
 	expect (rp.statusCode).toBe (200)
 	expect (JSON.parse (rp.responseText)).toStrictEqual ({
-		searchParams: {id: '1'}, 
+		searchParams: {action: 'delete'}, 
 		bodyParams: {label: "A"},
 	})
 	expect (rp.headers ['content-type']).toBe ('application/json; charset=utf-8')
