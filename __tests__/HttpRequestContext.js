@@ -37,7 +37,7 @@ test ('buffer', async () => {
 
 	const rp = await getResponseFromServer ('/?code=65', {
 		cb: async ctx => {
-			await ctx.write (Buffer.from ([parseInt (ctx.searchParams.code) + Object.entries (ctx.cookieParams).length]))
+			await ctx.write (Buffer.from ([parseInt (ctx.searchParams.code) + Object.entries (ctx.cookieParams).length + Object.entries (ctx.pathParams).length]))
 		} 
 	})
 
@@ -55,11 +55,14 @@ test ('post', async () => {
 			body: '{"label": "A"}',
 			headers: {Cookie: 'session=0; user=1'},
 		}, 
+		ctxOptions: {
+			pathMapping: ([type, id]) => ({type, id})
+		},
 		cb: async ctx => {
 			await ctx.readBody ()
-			const {searchParams, bodyParams, cookieParams, path} = ctx
+			const {searchParams, bodyParams, cookieParams, pathParams} = ctx
 			ctx.setCookie ('session', cookieParams.session, {maxAge: 1000})
-			await ctx.write ({searchParams, bodyParams, path})
+			await ctx.write ({searchParams, bodyParams, pathParams})
 		}
 	})
 
@@ -67,7 +70,7 @@ test ('post', async () => {
 	expect (JSON.parse (rp.responseText)).toStrictEqual ({
 		searchParams: {action: 'delete'}, 
 		bodyParams: {label: "A"},
-		path: ['users', '1']
+		pathParams: {type: 'users', id: '1'}
 	})
 	expect (rp.headers ['content-type']).toBe ('application/json; charset=utf-8')
 	expect (rp.headers ['cookie']).toBe ('session=0; Max-Age=1000')
