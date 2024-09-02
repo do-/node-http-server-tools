@@ -53,7 +53,10 @@ test ('post', async () => {
 		requestOptions: {
 			method: 'POST', 
 			body: '{"label": "A"}',
-			headers: {Cookie: 'session=0; user=1'},
+			headers: {
+				Cookie: 'session=0; user=1',
+				'content-type': 'application/json; charset=utf-8',
+			},
 		}, 
 		ctxOptions: {
 			pathMapping: ([type, id]) => ({type, id})
