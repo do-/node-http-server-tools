@@ -1,6 +1,6 @@
 {
   "name": "http-server-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Some wrappers around the standard node:http API",
   "main": "index.js",
   "files": [
@@ -45,7 +45,8 @@
   },
   "dependencies": {
     "cookie": "^0.6.0",
-    "http-errors": "^2.0.0"
+    "http-errors": "^2.0.0",
+    "mime-db": "^1.53.0"
   },
   "bugs": {
     "url": "https://github.com/do-/node-http-server-tools/issues"
