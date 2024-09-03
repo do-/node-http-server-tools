@@ -84,7 +84,11 @@ test ('echo', async () => {
 
 	const body = 'Hi there?'
 
-	const rp = await getResponseFromServer ('/?id=1', {requestOptions: {method: 'POST', body}, 
+	const rp = await getResponseFromServer ('/?id=1', {
+		requestOptions: {
+			method: 'POST', 
+			body,
+		}, 
 		ctxOptions: {
 			statusCode: 202,
 			keepBody: function () {return this.searchParams.id == 1}
@@ -137,15 +141,19 @@ test ('500', async () => {
 
 })
 
-
 test ('xml', async () => {
 
 	const rp = await getResponseFromServer ('/', {
+		requestOptions: {
+			method: 'POST', 
+			body: '>',
+		}, 		
 		ctxOptions: {
 			contentType: 'text/xml; charset=utf-7'
 		},
 		cb: async ctx => {
-			await ctx.write ('<?xml?..>')
+			await ctx.readBody ()
+			await ctx.write ('<?xml?..' + ctx.bodyText)
 		} 
 	})
 
