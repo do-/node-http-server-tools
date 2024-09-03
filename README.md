@@ -3,9 +3,11 @@
 
 `http-server-tools` is a thin wrapper around the standard [`'node:http'`](https://nodejs.org/api/http.html) library for developing Web services with as few external dependencies as possible, without resorting to a full blown middleware framework. Or to build such frameworks.
 
-The main class here, `HttpRequestContext`, incapsulates the [`ClientRequest`](https://nodejs.org/api/http.html#class-httpclientrequest)/[`ServerResponse`](https://nodejs.org/api/http.html#class-httpserverresponse) pair and implements an OO API hiding some transport protocol details while keeping low level operation totally available.
+The main class here, `HttpRequestContext`, incapsulates the [`ClientRequest`](https://nodejs.org/api/http.html#class-httpclientrequest)/[`ServerResponse`](https://nodejs.org/api/http.html#class-httpserverresponse) pair and implements an OO API hiding some transport protocol details while keeping low level operation totally available. 
 
-`HttpRequestContext` don't assume subclassing, but it's highly configurable and is meant to be used together with companion objects carrying sets of options for its constructor. Such objects should be singletons representing local application's specifics as opposed to one-off multi purpose `HttpRequestContext` instances.
+`HttpRequestContext` don't assume subclassing, but is highly configurable and is meant to be used together with companion objects carrying sets of options for its constructor. Such objects should be singletons representing local application's specifics as opposed to one-off multi purpose `HttpRequestContext` instances.
+
+To illustrate `HttpRequestContext` API in action, a trivial embeddable file directory sharing Web server, [`HttpStaticSite`](https://github.com/do-/node-http-server-tools/wiki/HttpStaticSite), is included in the library.
 
 # Installation
 ```sh
