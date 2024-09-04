@@ -75,8 +75,9 @@ test ('post', async () => {
 		bodyParams: {label: "A"},
 		pathParams: {type: 'users', id: '1'}
 	})
+
 	expect (rp.headers ['content-type']).toBe ('application/json; charset=utf-8')
-	expect (rp.headers ['cookie']).toBe ('session=0; Max-Age=1000')
+	expect (rp.headers ['set-cookie']).toStrictEqual (['session=0; Max-Age=1000'])
 
 })
 

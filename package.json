@@ -1,6 +1,6 @@
 {
   "name": "http-server-tools",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Some wrappers around the standard node:http API",
   "main": "index.js",
   "files": [
