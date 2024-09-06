@@ -49,7 +49,7 @@ test ('buffer', async () => {
 
 test ('post', async () => {
 
-	const rp = await getResponseFromServer ('/users/1/?action=delete', {
+	const rp = await getResponseFromServer ('/v1/users/1/?action=delete', {
 		requestOptions: {
 			method: 'POST', 
 			body: '{"label": "A"}',
@@ -59,7 +59,8 @@ test ('post', async () => {
 			},
 		}, 
 		ctxOptions: {
-			pathMapping: ([type, id]) => ({type, id})
+			pathMapping: ([type, id]) => ({type, id}),
+			pathBase: 1,
 		},
 		cb: async ctx => {
 			await ctx.readBody ()
