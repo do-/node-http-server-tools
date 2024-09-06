@@ -142,6 +142,9 @@ Any of `write...` methods is presumed to be called once per request lifecycle, a
  
 The response status code is set from `ctx.statusCode` which is initially set by configuration, `200` by default.
 
+## `writeEmpty`
+Invoked by `write` for `undefined` incoming value. Writes an empty [204 No Content](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204) response.
+
 ## `writeStream`
 This method is directly invoked by `write` for a [Readable](https://nodejs.org/api/stream.html#readable-streams) incoming value. It basically just pipes the argument into `.response`, but, first, it writes HTTP headers, `ContentType` specifically.
 
