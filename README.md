@@ -26,12 +26,13 @@ async function handle (response) {
 //    stringify   : obj => JSON.stringify (obj),    // for .write ({...})
 //    createError : err => createError (500, err, {expose: false}),
 
-//    maxBodySize : 10 * 1024 * 1024
+//    maxBodySize : 10 * 1024 * 1024,
+//    pathBase    : 0,
 //    pathMapping :       // e. g. ([type, id]) => ({type, id})
 //    keepBody    :       // e. g. function () {return this.path [0] === 'huge'}
 
-//    statusCode  : 200
-//    charset     : 'utf-8'
+//    statusCode  : 200,
+//    charset     : 'utf-8',
 //    contentType :       // e. g. 'text/xml', 'application/soap+xml'
 
   })
@@ -78,8 +79,17 @@ should fit right. Details are explained below in this section.
 ## `.searchParams`
 This property's value is an object composed from [url.searchParams](https://nodejs.org/api/url.html#urlsearchparams). For `/?type=users&id=1`, it's `{type: 'users', 'id': '1'}`.
 
+## `.path`
+This property presents the [`url.pathname`](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname), split by `'/'`, with all empty strings filtered away, with first `pathBase` stripped off. For example, for `http://127.0.0.1/api/v1.0//users/1/?show=1#help` it will be 
+
+|`pathBase`|`path`|
+| - | - |
+|`0` (default)|`['api', 'v1.0', 'users', '1']`|
+|`1`|`['v1.0', 'users', '1']`|
+|`2`|`['users', '1']`|
+
 ## `.pathParams`
-In many Web applications, components of the [URL's pathname](https://developer.mozilla.org/en-US/docs/Web/API/URL/pathname) with fixed positions have a clear business sense: for example, the root part means entity (name it `type`) and the second is the unique identifier (name it `id`): `/{type}/{id}`.
+In many Web applications, components of the `path` with fixed positions have a clear business sense: for example, the root part means entity (name it `type`) and the second is the unique identifier (name it `id`): `/{type}/{id}`.
 
 In such cases, `HttpRequestContext` lets configure a mapping function
 ```js
@@ -175,4 +185,3 @@ Name | Type | Description | Possible use
 `request` | [`ClientRequest`](https://nodejs.org/api/http.html#class-httpclientrequest) | The raw request | Processing the body as a stream; see `keepBody` option
 `response` | [`ServerResponse`](https://nodejs.org/api/http.html#class-httpserverresponse) | The raw response | Setting headers
 `url` | [`URL`](https://nodejs.org/api/url.html) | Parsed `request.url` | Reading non standard parameters
-`path` | Array | `url.pathname` split by `'/'`, non empty strings only | Custom alternatives to `pathMapping`
