@@ -33,6 +33,20 @@ test ('get', async () => {
 
 })
 
+
+test ('empty', async () => {
+
+	const rp = await getResponseFromServer ('/', {
+		cb: async ctx => {
+			await ctx.write ()
+		} 
+	})
+
+	expect (rp.statusCode).toBe (204)
+	expect (rp.responseText).toBe ('')
+
+})
+
 test ('buffer', async () => {
 
 	const rp = await getResponseFromServer ('/?code=65', {
