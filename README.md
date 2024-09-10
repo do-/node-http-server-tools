@@ -171,7 +171,7 @@ The `writeError` method requires an `Error` object as an argument. Normally, it 
 
 The result is written out with `writeText`. For a true `expose` value the text is the error's `message`; otherwise, just the status text is written.
 
-As for any text, the `Content-Type` is `text/plain` by default, but it may me altered by setting the error's extra `[HttpRequestContext.CONTENT_TYPE]` property (e. g. for sending JSON encoded error information to the client).
+As for any text, the `Content-Type` is `text/plain` by default, but it may me altered by setting `{headers: {'Content-Type': ...}}`.
 
 For `writeError`, the `statusCode` is copied from the error object, overriding what was set for the context instance.
 
