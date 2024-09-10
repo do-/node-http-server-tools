@@ -29,7 +29,7 @@ test ('get', async () => {
 
 	expect (rp.statusCode).toBe (200)
 	expect (rp.responseText).toBe ('{}')
-	expect (rp.headers ['content-type']).toBe ('text/extraordinary')
+	expect (rp.headers ['content-type']).toBe ('text/extraordinary; charset=utf-8')
 
 })
 
@@ -111,7 +111,7 @@ test ('echo', async () => {
 		},
 		cb: async ctx => {
 			await ctx.readBody ()
-			ctx.request [HttpRequestContext.CONTENT_TYPE] = 'application/quintet-stream'
+			ctx.contentType = 'application/quintet-stream'
 			await ctx.write (ctx.request)
 		}
 	})
@@ -130,8 +130,7 @@ test ('405', async () => {
 				await ctx.write ("OK")
 			}
 			else {
-				const e = createError (405)
-				e [HttpRequestContext.CONTENT_TYPE] = 'text/cursed'
+				const e = createError (405, {headers: {'Content-Type': 'text/cursed'}})
 				await ctx.writeError (e)
 			}
 		}
